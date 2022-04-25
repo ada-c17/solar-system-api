@@ -8,6 +8,14 @@ class Planet:
         self.description = description
         self.color = color 
 
+    def to_dict(self):
+        return {
+        self.id,
+        self.name,
+        self.description,
+        self.color,
+        }
+
 planets = [
     Planet(1, "Mercury", "Super small, comparatively", "slate gray"),
     Planet(2, "Venus", "It's sooo hot!", "yellow-white"),
@@ -22,6 +30,14 @@ planets = [
 
 bp = Blueprint("planets", __name__, url_prefix="/planets")
 
+def validate_planet(id):
+    try:
+        id = int(id)
+    except ValueError:
+        abort(make_response({"message": "invalid id: {id}"}), 400)
+
+    for planet in planets:
+
 @bp.route("", methods=["GET"])
 def get_planets():
     results_list = []
@@ -35,3 +51,8 @@ def get_planets():
             }
             )
     return jsonify(results_list)
+
+@bp.route("/<id>", methods=["GET"])
+def get_planet(id):
+    planet = validate_planet()
+    return planet.to_dict(), 200
