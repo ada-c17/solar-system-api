@@ -29,7 +29,7 @@ def get_planets():
     for planet in planets:						
         planets_response.append({					
         "id": planet.id,					
-        "title": planet.name,					
+        "name": planet.name,					
         "description": planet.description,
         "moons": planet.moons						
     })						
@@ -40,7 +40,7 @@ def handle_planet(planet_id):
     planet = validate_planet(planet_id)
     return {
                 "id": planet.id,					
-                "title": planet.name,					
+                "name": planet.name,					
                 "description": planet.description,
                 "moons": planet.moons	
             }
