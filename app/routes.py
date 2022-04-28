@@ -1,5 +1,5 @@
 from app import db
-from app.models.planet import Planet, to_dict
+from app.models.planet import Planet
 from flask import Blueprint, jsonify, make_response, abort, request
 
 
@@ -37,8 +37,14 @@ def create_planet():
 
 @bp.route("", methods=["GET"])
 def get_planets():
+
+    name_query = request.args.get("name")
+    if name_query:
+        planets = Planet.query.filter_by(name=name_query)
+    else:
+        planets = Planet.query.all()
+
     planet_list = []
-    planets = Planet.query.all()
     for planet in planets:
         planet_list.append(planet.to_dict())
 
