@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify, abort, make_response
+from flask import Blueprint, jsonify, abort, make_response, request
+from app import db
+from app.models.planet import Planet
 
 
 # class Planet:
@@ -30,26 +32,40 @@ from flask import Blueprint, jsonify, abort, make_response
 
 bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-def validate_planet(id):
-    try:
-        id = int(id)
-    except ValueError:
-        abort(make_response({"message":f"invalid id: {id}"}, 400))
+@bp.route("", methods=["POST"])
+def create_planet():
+    request_body = request.get_json()
+    new_planet = Planet(
+        name = request_body["name"],
+        description = request_body["description"],
+        color = request_body["color"]
+    )
 
-    for planet in planets:
-        if planet.id == id:
-            return planet
+    db.session.add(new_planet)
+    db.session.commit()
 
-    abort(make_response({"Message":f"Planet ID {id} not found"}, 404))
+    return f"Planet {new_planet.name} successfully created", 201
 
-@bp.route("", methods=["GET"])
-def get_planets():
-    results_list = []
-    for planet in planets:
-        results_list.append(planet.to_dict())
-    return jsonify(results_list)
+# def validate_planet(id):
+#     try:
+#         id = int(id)
+#     except ValueError:
+#         abort(make_response({"message":f"invalid id: {id}"}, 400))
 
-@bp.route("/<id>", methods=["GET"])
-def get_planet(id):
-    planet = validate_planet(id)
-    return planet.to_dict(), 200
+#     for planet in planets:
+#         if planet.id == id:
+#             return planet
+
+#     abort(make_response({"Message":f"Planet ID {id} not found"}, 404))
+
+# @bp.route("", methods=["GET"])
+# def get_planets():
+#     results_list = []
+#     for planet in planets:
+#         results_list.append(planet.to_dict())
+#     return jsonify(results_list)
+
+# @bp.route("/<id>", methods=["GET"])
+# def get_planet(id):
+#     planet = validate_planet(id)
+#     return planet.to_dict(), 200
