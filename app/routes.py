@@ -4,7 +4,6 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 planet_bp = Blueprint("planet", __name__, url_prefix="/planets")
 
-
 @planet_bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
@@ -12,14 +11,13 @@ def create_planet():
     new_planet = Planet(
         name=request_body['name'],
         description=request_body['description'],
-        distance_from_earth=request_body['Distance from Earth']
+        distance_from_earth=request_body['distance from earth']
     )
 
     db.session.add(new_planet)
     db.session.commit()
 
     return make_response(f"Planet {new_planet.name} has been created", 201)
-
 
 @planet_bp.route("", methods=["GET"])
 def get_planets():
