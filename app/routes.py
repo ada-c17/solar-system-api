@@ -1,32 +1,32 @@
 from flask import Blueprint, jsonify, abort, make_response
 
 
-class Planet:
-    def __init__(self, id, name, description, color):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.color = color 
+# class Planet:
+#     def __init__(self, id, name, description, color):
+#         self.id = id
+#         self.name = name
+#         self.description = description
+#         self.color = color 
 
-    def to_dict(self):
-        return dict(
-        id=self.id,
-        name=self.name,
-        description=self.description,
-        color=self.color,
-        )
+#     def to_dict(self):
+#         return dict(
+#         id=self.id,
+#         name=self.name,
+#         description=self.description,
+#         color=self.color,
+#         )
 
-planets = [
-    Planet(1, "Mercury", "Super small, comparatively", "slate gray"),
-    Planet(2, "Venus", "It's sooo hot!", "yellow-white"),
-    Planet(3, "Earth", "Home to humans", "blue-green"),
-    Planet(4, "Mars", "The red one", "red"),
-    Planet(5, "Jupiter", "The biggest of them all", "orange-yellow"),
-    Planet(6, "Saturn", "What beautiful rings it has!", "hazy yellow-brown"),
-    Planet(7, "Uranus", "Tilted sideways", "blue-green"),
-    Planet(8, "Neptune", "Giant, stormy, blue", "blue"),
-    Planet(9, "Maybe Pluto", "Is it really a planet??", "reddish-brown")
-    ]
+# planets = [
+#     Planet(1, "Mercury", "Super small, comparatively", "slate gray"),
+#     Planet(2, "Venus", "It's sooo hot!", "yellow-white"),
+#     Planet(3, "Earth", "Home to humans", "blue-green"),
+#     Planet(4, "Mars", "The red one", "red"),
+#     Planet(5, "Jupiter", "The biggest of them all", "orange-yellow"),
+#     Planet(6, "Saturn", "What beautiful rings it has!", "hazy yellow-brown"),
+#     Planet(7, "Uranus", "Tilted sideways", "blue-green"),
+#     Planet(8, "Neptune", "Giant, stormy, blue", "blue"),
+#     Planet(9, "Maybe Pluto", "Is it really a planet??", "reddish-brown")
+#     ]
 
 bp = Blueprint("planets", __name__, url_prefix="/planets")
 
