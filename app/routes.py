@@ -1,19 +1,19 @@
 from flask import Blueprint, jsonify
 
 
-class Planet:
-    def __init__(self, id, name, description, distance_from_earth):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.distance_from_earth = distance_from_earth
+# class Planet:
+#     def __init__(self, id, name, description, distance_from_earth):
+#         self.id = id
+#         self.name = name
+#         self.description = description
+#         self.distance_from_earth = distance_from_earth
 
 
-planets = [
-    Planet(1, "Mars", "Next livable planet", "131.48 million mi"),
-    Planet(2, "Mercury", "Smallest planet", "94.025 million mi"),
-    Planet(3, "Earth", "We live here, slowly dying", "0.0 million mi")
-]
+# planets = [
+#     Planet(1, "Mars", "Next livable planet", "131.48 million mi"),
+#     Planet(2, "Mercury", "Smallest planet", "94.025 million mi"),
+#     Planet(3, "Earth", "We live here, slowly dying", "0.0 million mi")
+# ]
 
 planet_bp = Blueprint("planet", __name__, url_prefix="/planets")
 
