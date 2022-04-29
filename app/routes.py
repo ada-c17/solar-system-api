@@ -46,6 +46,20 @@ def create_planet():
 
     return f"Planet {new_planet.name} successfully created", 201
 
+@bp.route("", methods=["GET"])
+def read_all_planets():
+    planets = Planet.query.all()
+    planets_response = []
+    for planet in planets:
+        planets_response.append(
+            {
+                "name": planet.name,
+                "description": planet.description,
+                "color": planet.color
+            }
+        )
+    return jsonify(planets_response)
+
 # def validate_planet(id):
 #     try:
 #         id = int(id)
