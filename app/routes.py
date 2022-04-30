@@ -51,4 +51,4 @@ def get_individual_planet(planet_id):
         "name": planet.name,
         "description": planet.description,
         "has_moon": planet.has_moon
-            }
+            }, 200
