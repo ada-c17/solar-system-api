@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, abort, make_response
 
 class Planet:
     def __init__(self, id, name, description, has_moon=None):
@@ -14,6 +14,19 @@ planets = [
     Planet(4, "Mars", "terrestrial", True)
 ]
 
+def validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+
+    for planet in planets:
+        if planet.id == planet_id:
+            return planet
+
+    abort(make_response({"message":f"planet {planet_id} not found"}, 404))
+
+
 bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 
@@ -28,3 +41,14 @@ def get_planets():
             "has_moon": planet.has_moon
         })
     return jsonify(list_of_planets), 200
+
+@bp.route("/<planet_id>", methods=("GET",))
+def get_individual_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    return {
+        "id": planet.id,
+        "name": planet.name,
+        "description": planet.description,
+        "has_moon": planet.has_moon
+            }
