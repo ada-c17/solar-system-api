@@ -1,39 +1,41 @@
-from flask import Blueprint, jsonify, abort, make_response
+from app import db
+from app.models.planet import Planet
+from flask import Blueprint, jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
-
-class Planet:
-    def __init__ (self, id, name, description, moon_count):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.moon_count = moon_count
     
-    def to_json(self):
-        return {
-            "id": self.id, 
-            "name": self.name,
-            "description": self.description, 
-            "moon_count": self.moon_count
-        }
+    # def to_json(self):
+    #     return {
+    #         "id": self.id, 
+    #         "name": self.name,
+    #         "description": self.description, 
+    #         "moon_count": self.moon_count
+    #     }
 
-planets = [
-    Planet(1, "Mercury", "red planet", 1),
-    Planet(2, "Venus", "blue planet", 3),
-    Planet(1, "Earth", "water planet", 1)
-]
+# def validate_planet(id):
+#     try:
+#         id = int(id)
+#     except:
+#         abort(make_response({"message": f"Planet {id} is not valid"}, 400))
 
-def validate_planet(id):
-    try:
-        id = int(id)
-    except:
-        abort(make_response({"message": f"Planet {id} is not valid"}, 400))
-
-    for planet in planets:
-        if planet.id == id:
-            return planet
+#     for planet in planets:
+#         if planet.id == id:
+#             return planet
     
-    return abort(make_response({"message": f"Planet {id} not found"}, 404))
+#     return abort(make_response({"message": f"Planet {id} not found"}, 404))
+
+
+@planets_bp.route("", methods=["POST"])
+def create_planet():
+    request_body = request.get_json()
+    new_planet = Planet(name=request_body["name"],
+                    description=request_body["description"],
+                    moon_count=request_body["moon_count"])
+
+    db.session.add(new_planet)
+    db.session.commit()
+
+    return make_response(f"Planet {new_planet.name} successfully created", 201)
 
 @planets_bp.route("", methods=["GET"])
 def get_planets():
