@@ -39,11 +39,12 @@ def create_planet():
 
 @planets_bp.route("", methods=["GET"])
 def get_planets():
+    planets = Planet.query.all()
     planet_response_body = []
     for planet in planets:
         planet_response_body.append(planet.to_json())
             
-    return jsonify(planet_response_body)
+    return jsonify(planet_response_body), 200
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
