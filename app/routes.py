@@ -16,6 +16,15 @@ from app.models.planet import Planet
 #     Planet("Jupiter", 5, "Jupiter is the 5th planet in solar system", "tan")
 # ]
 
+def validate_planet(id):
+    try:
+        id = int(id)
+    except:
+        return abort(make_response({"message": f"planet {id} is invalid"}, 400))
+    for planet in planets :
+        if planet.id == id:
+            return jsonify(planet.to_json()), 200
+    return abort(make_response({"message": f"planet {id} is not found"}, 404))
 # first string is flask blueprint name
 # run in localhost need to add/planets at the end
 solar_bp = Blueprint("planets", __name__, url_prefix="/planets")
