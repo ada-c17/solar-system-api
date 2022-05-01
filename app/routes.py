@@ -1,25 +1,25 @@
 from flask import Blueprint, jsonify, abort, make_response
 
 
-class Planet:
-    def __init__(self, name, id, description, color):
-        self.name = name
-        self.id = id
-        self.description = description
-        self.color = color
+# class Planet:
+#     def __init__(self, name, id, description, color):
+#         self.name = name
+#         self.id = id
+#         self.description = description
+#         self.color = color
     
-    def to_json(self):
-        return {"Name": self.name,
-                "ID": self.id,
-                "Description": self.description,
-                "Color": self.color
-                }
+#     def to_json(self):
+#         return {"Name": self.name,
+#                 "ID": self.id,
+#                 "Description": self.description,
+#                 "Color": self.color
+#                 }
 
-planets = [
-    Planet("Earth", 3, "Earth is the 3rd planet in solar system", "blue"),
-    Planet("Mars", 4, "Mars is the 4th planet in solar system", "red"),
-    Planet("Jupiter", 5, "Jupiter is the 5th planet in solar system", "tan")
-]
+# planets = [
+#     Planet("Earth", 3, "Earth is the 3rd planet in solar system", "blue"),
+#     Planet("Mars", 4, "Mars is the 4th planet in solar system", "red"),
+#     Planet("Jupiter", 5, "Jupiter is the 5th planet in solar system", "tan")
+# ]
 
 def validate_planet(id):
     try:
