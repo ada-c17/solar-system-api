@@ -1,6 +1,16 @@
-from flask import Blueprint, jsonify, abort, make_response
+from flask import Blueprint, jsonify, request, make_response
+from app import solar_system_development
+from app.models.planet import Planet
+
+# class Planet:
+#     def __init__(self, name, id, description, color):
+#         self.name = name
+#         self.id = id
+#         self.description = description
+#         self.color = color
 
 
+<<<<<<< HEAD
 # class Planet:
 #     def __init__(self, name, id, description, color):
 #         self.name = name
@@ -15,6 +25,8 @@ from flask import Blueprint, jsonify, abort, make_response
 #                 "Color": self.color
 #                 }
 
+=======
+>>>>>>> d5b0ed65df6c5d7d8c660d713c4c1da999dc4699
 # planets = [
 #     Planet("Earth", 3, "Earth is the 3rd planet in solar system", "blue"),
 #     Planet("Mars", 4, "Mars is the 4th planet in solar system", "red"),
@@ -32,28 +44,45 @@ def validate_planet(id):
     return abort(make_response({"message": f"planet {id} is not found"}, 404))
 # first string is flask blueprint name
 # run in localhost need to add/planets at the end
-solar_bp = Blueprint("", __name__, url_prefix="/planets")
+solar_bp = Blueprint("planets", __name__, url_prefix="/planets")
+
+# @solar_bp.route("", methods=["GET"])
+# def see_planets():
+# all_planets = []
+    # for planet in planets:
+    #     all_planets.append(
+    #         {"Name": planet.name,
+    #          "ID": planet.id,
+    #          "Description": planet.description,
+    #          "Color": planet.color}
+    #     )
+    # return jsonify(all_planets), 200
 
 
-@solar_bp.route("", methods=["GET"])
-def see_planets():
-    all_planets = []
-    for planet in planets:
-        all_planets.append(
-          planet.to_json()
-        )
-    return jsonify(all_planets), 200
+@solar_bp.route("", methods=["POST", "GET"])
+def handle_planets():
+    if request.method== "POST":
+        request_body=request.get_json()
+        new_planet=Planet(
+            id=request_body["id"],
+            name=request_body["name"],
+            color=request_body["color"],
+            description=request_body["description"])
+        
+        solar_system_development.session.add(new_planet)
+        solar_system_development.session.commit()
 
-#Get one planet
-@solar_bp.route("/<id>", methods=["GET"])
-def read_one_planet(id):
-    planet_response = validate_planet(id)
-    return planet_response
+        return make_response(f"Planet {new_planet.name} successfully created", 201)
 
+    elif request.method== "GET":
+        planets=Planet.query.all()
+        planets_response=[]
+        for planet in planets:
+            planets_response.append(
+                    {"Name": planet.name,
+                    "ID": planet.id,
+                    "Description": planet.description,
+                    "Color": planet.color})
+        return jsonify(planets_response), 200
 
-
-
-
-
-
-
+        
