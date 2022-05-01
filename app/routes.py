@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, make_response
-from app import solar_system_development
+from app import db
 from app.models.planet import Planet
 
 # class Planet:
@@ -16,15 +16,15 @@ from app.models.planet import Planet
 #     Planet("Jupiter", 5, "Jupiter is the 5th planet in solar system", "tan")
 # ]
 
-def validate_planet(id):
-    try:
-        id = int(id)
-    except:
-        return abort(make_response({"message": f"planet {id} is invalid"}, 400))
-    for planet in planets :
-        if planet.id == id:
-            return jsonify(planet.to_json()), 200
-    return abort(make_response({"message": f"planet {id} is not found"}, 404))
+# def validate_planet(id):
+#     try:
+#         id = int(id)
+#     except:
+#         return abort(make_response({"message": f"planet {id} is invalid"}, 400))
+#     for planet in planets :
+#         if planet.id == id:
+#             return jsonify(planet.to_json()), 200
+#     return abort(make_response({"message": f"planet {id} is not found"}, 404))
 # first string is flask blueprint name
 # run in localhost need to add/planets at the end
 solar_bp = Blueprint("planets", __name__, url_prefix="/planets")
@@ -52,8 +52,8 @@ def handle_planets():
             color=request_body["color"],
             description=request_body["description"])
         
-        solar_system_development.session.add(new_planet)
-        solar_system_development.session.commit()
+        db.session.add(new_planet)
+        db.session.commit()
 
         return make_response(f"Planet {new_planet.name} successfully created", 201)
 
