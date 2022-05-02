@@ -13,3 +13,7 @@ class Planet(db.Model):
             description = self.description,
             has_moon = self.has_moon,
         )
+    
+    @classmethod
+    def validate_fields(cls):
+        pass
