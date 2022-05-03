@@ -1,35 +1,9 @@
+from os import abort
 from app import db
 from app.models.planet import Planet
 from flask import Blueprint, jsonify, abort, make_response, request
 
 
-# planet_bp = Blueprint("books", __name__, url_prefix = "/planets")
-
-# class Planet:
-#     def __init__(self, id, name, description, moons):
-#         self.id = id
-#         self.name = name
-#         self.description = description
-#         self.moons = moons
-#     def to_json(self):
-#         return {
-#                 "id": self.id,
-#                 "name": self.name,
-#                 "desciption": self.description,
-#                 "moons": self.moons
-#             }
-
-# planets = [
-#             Planet(1, "Mercury", "the nearest planet to the Sun", 0),
-#             Planet(2, "Venus", "named after the Roman goddess of love and beauty", 0),
-#             Planet(3, "Earth", "Home. the only astronomical object known to harbor life", 1),
-#             Planet(4, "Mars", "is often called the Red Planet", 2),
-#             Planet(5, "Jupiter", "more then 2.5 time the mass of all other planets", 79),
-#             Planet(6, "Saturn", "second-largest planet in the Solar System", 82),
-#             Planet(7, "Uranus", "named after the Greek god of the sky", 27),
-#             Planet(8, "Neptune", "the densest giant planet", 14),
-#             Planet(9, "Pluto", "may or may not be a planet, poor Pluto", 1)
-#             ]
 planet_bp = Blueprint("planet_bp", __name__, url_prefix="/planets")
 # Helper function:
 
@@ -88,7 +62,7 @@ def read_all_planets():
 @planet_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
     planet = validate_planet(planet_id)
-    return jsonify(planet.to_json(), 200)
+    return make_response(planet.to_json(), 200)
 
     # planets_response = []
     # for planet in planets:

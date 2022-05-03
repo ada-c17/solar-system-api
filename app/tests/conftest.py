@@ -27,7 +27,7 @@ def client(app):
 
 @pytest.fixture
 def two_saved_planets(app):
-    Mercury = Planet(name = "Mercury", description = "This is the first planet", moons = "2")
+    Mercury = Planet(name = "Mercury", description = "This is the first planet", moons = 2)
     Venus = Planet(name = "Venus", description = "named after the Roman goddess of love and beauty", moons = 0)
 
     db.session.add_all([Mercury,Venus])
