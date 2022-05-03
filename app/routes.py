@@ -1,7 +1,6 @@
-from crypt import methods
 from app import db
 from app.models.planet import Planet
-from flask import Blueprint, jsonify, make_response, request
+from flask import Blueprint, jsonify, make_response, request, abort
 
 # class Planet:
 #     def __init__(self, id, name, description, length_of_day):
@@ -31,6 +30,19 @@ from flask import Blueprint, jsonify, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
+def validate_planet(id):
+    try:
+        id = int(id)
+    except:
+        return abort(make_response({"message": f"planet {id} is invalid"}, 400))
+
+
+    planet = Planet.query.get(id)
+    if not planet:
+        abort(make_response({"message": f"planet {id} not found"},404))
+    
+    return planet
+
 @planets_bp.route("", methods=["GET"])
 def get_all_planets():
     planets_response = []
@@ -38,7 +50,8 @@ def get_all_planets():
     for planet in planets:
         planets_response.append(planet.to_json())
     
-    return jsonify(planets_response)
+    return jsonify(planets_response),200
+
 @planets_bp.route("", methods=["POST"])
 def create_planets():
     request_body = request.get_json()
@@ -51,18 +64,33 @@ def create_planets():
 
     return make_response(f"Planet {new_planet.name} successfully created", 201)
 
+@planets_bp.route("/<id>", methods=["GET"])
+def read_one_planet(id):
+    planet = validate_planet(id)
 
-# def valid_planet(id):
-#     try:
-#         id = int(id)
-#     except:
-#         return abort(make_response({"message": f"planet {id} is invalid"}), 400)
+    return jsonify(planet.to_json()),200
 
-#     for planet in planets:
-#         if planet.id == id:
-#             return planet
+@planets_bp.route("/<id>", methods=["PUT"])
+def update_one_planet(id):
+    planet = validate_planet(id)
+    request_body = request.get_json()
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+    planet.length_of_day = request_body["length_of_day"]
+
+    db.session.commit()
+    
+    return make_response(f"Planet {id} successfully updated", 200)
+
+@planets_bp.route("/<id>", methods=["DELETE"])
+def delete_one_planet(id):
+    planet = validate_planet(id)
+    db.session.delete(planet)
+    db.session.commit()
+    return make_response(f"Planet {id} successfully deleted", 200)
+
         
-#     return abort(make_response({"message": f"planet {id} not found"}),404)
+    
 
 # @planets_bp.route("/<id>", methods=["GET"])
 # def get_one_planet(id):
