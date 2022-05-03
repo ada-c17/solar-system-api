@@ -45,3 +45,13 @@ def validate_planet(planet_id):
 def get_one_planet(planet_id):
     planet = validate_planet(planet_id)
     return jsonify(planet.to_json(), 200)
+
+
+@planet_bp.route("/<planet_id>", methods=["DELETE"])
+def delete_one_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    db.session.delete(planet)
+    db.session.commit()
+
+    return make_response(f"Planet {planet.id} has been deleted", 200)
