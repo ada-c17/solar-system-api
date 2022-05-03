@@ -67,18 +67,3 @@ def delete_one_planet(planet_id):
     db.session.commit()
 
     return make_response(f"Planet {planet.id} has been deleted", 200)
-<<<<<<< HEAD:app/routes.py
-
-
-@planet_bp.route("/<book_id>", methods=["PUT"])
-def update_planet(planet_id):
-    planet = validate_planet(planet_id)
-    request_body = request.get_json()
-    planet.name = request_body["name"]
-    planet.description = request_body["description"]
-    planet.distance_from_earth = request_body["distance from earth"]
-    db.session.commit()
-
-    return make_response(f"Planet #{planet.id} successfully updated")
-=======
->>>>>>> 3242fb4274b7de0154b3854bdc9468a3ad1b0fdf:app/routes/planet_routes.py
