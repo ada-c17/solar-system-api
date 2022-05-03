@@ -7,8 +7,8 @@ class Planet(db.Model):
     color = db.Column(db.String)
     
     def to_json(self):
-        return {"ID": self.id,
-                "Name": self.name,
-                "Description": self.description,
-                "Color": self.color
+        return {"id": self.id,
+                "name": self.name,
+                "description": self.description,
+                "color": self.color
                 }
