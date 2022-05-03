@@ -28,19 +28,20 @@ def get_planets():
 
     return jsonify(planets_response, 200)
 
-# def validate_planet(planet_id):
-#     try:
-#         planet_id = int(planet_id)
-#     except:
-#         return abort(make_response({"message": f"planet {planet_id} is invaild"}, 400))
+def validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        return abort(make_response({"message": f"planet {planet_id} is invaild"}, 400))
 
-#     for planet in planets:
-#         if planet.id == planet_id:
-#             return planet
-#     return abort(make_response({"message": f"planet {planet_id} does not exist"}, 404))
+    planet = Planet.query.get(planet_id)
+    
+    if not planet:
+        return abort(make_response({"message": f"planet {planet_id} does not exist"}, 404))
+    return planet
 
 
-# @planet_bp.route("/<planet_id>", methods=["GET"])
-# def get_one_planet(planet_id):
-#     planet = validate_planet(planet_id)
-#     return jsonify(planet.to_json(), 200)
+@planet_bp.route("/<planet_id>", methods=["GET"])
+def get_one_planet(planet_id):
+    planet = validate_planet(planet_id)
+    return jsonify(planet.to_json(), 200)
