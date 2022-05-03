@@ -53,9 +53,50 @@ def handle_planets():
         # commit instance						
 							
         return make_response(f"Planet {new_planet.name} created", 201)
-        
-        	
+#Get Planet 
+@planets_bp.route("/<planet_id>", methods=["GET"])
+def get_planet_by_id(planet_id):
+    planet = validate_planet(planet_id)
+    return {	
+        "id": planet.id, 	
+        "name": planet.name, 	
+        "description": planet.description,	
+        "moons":planet.moons
+        }
+# Update
+@planets_bp.route("/<planet_id>", methods=["PUT"])
+def update_planet_by_id(planet_id):
+    planet = validate_planet(planet_id)
+    request_body = request.get_json()
+	
+    planet.name = request_body["name"] 	
+    planet.description = request_body["description"]	
+    planet.moons = request_body["moons"]
 
+    db.session.commit()
+    return (f"Planet {planet.name} successfully updated.")
+# Delete 
+@planets_bp.route("/<planet_id>", methods=["DELETE"])
+def delete_planet_by_id(planet_id):
+    planet = validate_planet(planet_id)
+
+    db.session.delete(planet)
+    db.session.commit()
+
+    return make_response(f"Planet with id {planet.id} was successfully deleted!")
+
+# Helper Function
+def validate_planet(id):
+    try:
+        id = int(id)
+    except ValueError:
+        abort(make_response(jsonify(dict(details=f"Invalid Id {id}")), 400))
+    
+    planet = Planet.query.get(id)
+    if planet:
+        return planet
+    
+    abort(make_response(jsonify(dict(details=f"No planet with id {id} found")), 404))
 # @planets_bp.route("/<planet_id>", methods=["GET"])	
 # def handle_planet(planet_id):
 #     planet = validate_planet(planet_id)
