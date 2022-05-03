@@ -12,18 +12,15 @@ planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
     #         "moon_count": self.moon_count
     #     }
 
-# def validate_planet(id):
-#     try:
-#         id = int(id)
-#     except:
-#         abort(make_response({"message": f"Planet {id} is not valid"}, 400))
-
-#     for planet in planets:
-#         if planet.id == id:
-#             return planet
-    
-#     return abort(make_response({"message": f"Planet {id} not found"}, 404))
-
+def validate_planet(id):
+    try:
+        id = int(id)
+    except:
+        abort(make_response({"message": f"Planet {id} is not valid"}, 400))
+    planet = Planet.query.get(id)
+    if not planet:
+        abort(make_response({"message": f"Planet {id} not found"}, 404))
+    return planet
 
 @planets_bp.route("", methods=["POST"])
 def create_planet():
@@ -51,3 +48,17 @@ def read_one_planet(planet_id):
     planet = validate_planet(planet_id)
 
     return jsonify(planet.to_json())
+
+@planets_bp.route("/<planet_id>", methods=["PUT"])
+def update_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    request_body = request.get_json()
+
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+    planet.moon_count = request_body["moon_count"]
+
+    db.session.commit()
+
+    return make_response(f"Planet #{planet.id} successfully updated")
