@@ -1,33 +1,14 @@
 from app import db
 from app.models.planet import Planet
-from flask import Blueprint, jsonify, abort, make_response, request
+from flask import Blueprint, jsonify, make_response, request
+from .helpers import validate_planet
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
-    
-    # def to_json(self):
-    #     return {
-    #         "id": self.id, 
-    #         "name": self.name,
-    #         "description": self.description, 
-    #         "moon_count": self.moon_count
-    #     }
-
-def validate_planet(id):
-    try:
-        id = int(id)
-    except:
-        abort(make_response({"message": f"Planet {id} is not valid"}, 400))
-    planet = Planet.query.get(id)
-    if not planet:
-        abort(make_response({"message": f"Planet {id} not found"}, 404))
-    return planet
 
 @planets_bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
-    new_planet = Planet(name=request_body["name"],
-                    description=request_body["description"],
-                    moon_count=request_body["moon_count"])
+    new_planet = Planet.create(request_body)
 
     db.session.add(new_planet)
     db.session.commit()
@@ -36,7 +17,13 @@ def create_planet():
 
 @planets_bp.route("", methods=["GET"])
 def get_planets():
-    planets = Planet.query.all()
+    name_query = request.args.get("name")
+
+    if name_query:
+        planets = Planet.query.filter_by(name=name_query)
+    else:
+        planets = Planet.query.all()
+
     planet_response_body = []
     for planet in planets:
         planet_response_body.append(planet.to_json())
@@ -55,9 +42,7 @@ def update_planet(planet_id):
 
     request_body = request.get_json()
 
-    planet.name = request_body["name"]
-    planet.description = request_body["description"]
-    planet.moon_count = request_body["moon_count"]
+    planet.update(request_body)
 
     db.session.commit()
 
