@@ -13,8 +13,6 @@ class Planet(db.Model):
                 "color": self.color
                 }
 
-<<<<<<< HEAD
-=======
     def update(self, req_body):
         
         self.name = req_body["name"]
@@ -30,4 +28,3 @@ class Planet(db.Model):
         )
 
         return new_planet
->>>>>>> f3c0e71d9fdc5df838f7772e6e856f6e2fd2095d
