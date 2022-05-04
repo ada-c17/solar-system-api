@@ -29,7 +29,8 @@ def create_planets():
         db.session.commit()
     except:
         abort(make_response({"message":f"invalid input"}, 400))
-    return make_response(f"Planet {new_planet.name} successfully created", 201)
+    return make_response(jsonify(f"Planet {new_planet.name} successfully created"), 201)
+    
 
 @planet_bp.route("", methods=["GET"])
 def read_all_planets():
@@ -92,4 +93,5 @@ def delete_a_planet(planet_id):
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response({"message":f"planet{planet_id} successfully deleted"}, 200)
+    return make_response(jsonify(f"planet{planet_id} successfully deleted"), 200)
+
