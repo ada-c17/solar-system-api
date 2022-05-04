@@ -1,19 +1,19 @@
-from urllib import response
 from app import db
 from app.models.planet import Planet
 from flask import Blueprint, jsonify, make_response, request, abort
 
-
-
-        
-    
 
 planet_bp = Blueprint("planet", __name__, url_prefix="/planets")
 
 
 @planet_bp.route("", methods=["GET"])
 def read_all_planets():
-    planets = Planet.query.all()
+    habitable_query = request.args.get("habitable")
+    if habitable_query:
+        planets = Planet.query.filter_by(habitable = habitable_query)
+
+    else:
+        planets = Planet.query.all()
     planets_response = []
 
     for planet in planets:
