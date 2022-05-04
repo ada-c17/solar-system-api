@@ -16,7 +16,7 @@ def create_app(test_config=None):
 
     from app.models.planet import Planet
 
-    from .routes import bp
+    from .routes.planet_routes import bp
     app.register_blueprint(bp)
 
     return app
