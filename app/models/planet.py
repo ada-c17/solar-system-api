@@ -13,3 +13,21 @@ class Planet(db.Model):
                 "color": self.color
                 }
 
+<<<<<<< HEAD
+=======
+    def update(self, req_body):
+        
+        self.name = req_body["name"]
+        self.description = req_body["description"]
+        self.color = req_body["color"]
+
+    @classmethod
+    def create(cls, req_body):
+        new_planet = cls(
+            name=req_body['name'],
+            description=req_body['description']
+            color=req_body('color']
+        )
+
+        return new_planet
+>>>>>>> f3c0e71d9fdc5df838f7772e6e856f6e2fd2095d
