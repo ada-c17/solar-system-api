@@ -20,7 +20,11 @@ def handle_planets():
         return make_response(f"Planet {new_planet.name} successfully created", 201)
 
     elif request.method== "GET":
-        planets=Planet.query.all()
+        name_query=request.args.get('name')
+        if name_query:
+            planets=Planet.query.filter_by(name=name_query)
+        else:
+            planets=Planet.query.all()
         planets_response=[]
         for planet in planets:
             planets_response.append(
@@ -29,6 +33,7 @@ def handle_planets():
                     "description": planet.description,
                     "color": planet.color})
         return jsonify(planets_response), 200
+
 
 # Validate if GET by Planet ID does not exist
 def validate_planet(planet_id):
@@ -61,9 +66,7 @@ def update_planet(planet_id):
     planet = validate_planet(planet_id)
     request_body = request.get_json()
 
-    planet.name = request_body["name"]
-    planet.description = request_body["description"]
-    planet.color = request_body["color"]
+    planet.update(request_body)
 
     db.session.commit()
 
