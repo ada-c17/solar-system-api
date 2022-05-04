@@ -12,3 +12,4 @@ class Planet(db.Model):
                 "description": self.description,
                 "color": self.color
                 }
+
