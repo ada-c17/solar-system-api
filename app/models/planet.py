@@ -23,8 +23,8 @@ class Planet(db.Model):
     def create(cls, req_body):
         new_planet = cls(
             name=req_body['name'],
-            description=req_body['description']
-            color=req_body('color']
+            description=req_body['description'],
+            color=req_body['color']
         )
 
         return new_planet
