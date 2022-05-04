@@ -1,4 +1,3 @@
-import re
 from flask import Blueprint, jsonify, abort, make_response, request
 from app import db
 from app.models.planet import Planet
@@ -16,7 +15,6 @@ from app.models.planet import Planet
 #     Planet(3, "Earth", 1, "The third planet.")
 
 # ]
-
 
 planets_bp = Blueprint("planets", __name__, url_prefix = "/planets")
 
