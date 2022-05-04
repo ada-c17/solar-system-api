@@ -17,6 +17,7 @@ def validate_planet(planet_id):
     
     return planet
 
+
 @bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
@@ -33,7 +34,23 @@ def create_planet():
 
 @bp.route("", methods=["GET"])
 def read_all_planets():
-    planets = Planet.query.all()
+    name_param = request.args.get("name")
+    description_param = request.args.get("description")
+    color_param = request.args.get("color")
+
+    planets = Planet.query
+
+    if name_param:
+        planets = planets.filter_by(name=name_param)
+    if description_param:
+        planets = planets.filter_by(description=description_param)
+    if color_param:
+        planets = planets.filter_by(color=color_param)
+    
+    planets = planets.all()
+
+    #.query provides an in progress query
+
     planets_response = []
     for planet in planets:
         planets_response.append(
