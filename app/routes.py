@@ -22,7 +22,6 @@ def create_planet():
 
 @bp.route("", methods=["GET"])
 def get_planets():
-
     name_query = request.args.get("name")
     if name_query:
         planets = Planet.query.filter_by(name=name_query)
@@ -41,11 +40,23 @@ def get_planet(planet_id):
 
 
 @bp.route("/<planet_id>", methods=["PUT"])
-def update_planet(planet_id):
+def replace_planet(planet_id):
     request_body = request.get_json()
     planet = get_planet_record_by_id(planet_id)
 
     replace_planet_safely(planet, request_body)
+
+    db.session.commit()
+
+    return success_msg(f"Planet #{planet.id} successfully updated", 200)
+
+
+@bp.route("/<planet_id>", methods=["PATCH"])
+def update_planet_with_id(planet_id):
+    planet = get_planet_record_by_id(planet_id)
+    request_body = request.get_json()
+
+    planet.check_keys(request_body)
 
     db.session.commit()
 

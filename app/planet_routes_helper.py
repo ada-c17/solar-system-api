@@ -1,6 +1,7 @@
 from app.models.planet import Planet
 from .routes_helper import error_msg
 
+
 def make_planet_safely(data_dict):
     try:
         planet = Planet.from_dict(data_dict)

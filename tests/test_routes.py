@@ -63,7 +63,20 @@ def test_create_planet(client):
         "has_moon": False
     }
 
-# There are additional tests I wrote to increase the code coverage as extra practice. It is not part of the project requirements.
+# These are additional tests I wrote to increase the code coverage as extra practice. It is not part of the project requirements.
+
+
+def test_update_planet(client, save_two_planets):
+    response = client.patch("/planets/2", json={
+        "name": "Updating Planet",
+        "description": "gaseous",
+        "has_moon": True
+    })
+    response_body = response.get_json()
+
+    assert response.status_code == 200
+    assert response_body == {"details": "Planet #2 successfully updated"}
+
 
 def test_delete_planet(client, save_two_planets):
     response = client.delete("/planets/2")
@@ -73,9 +86,9 @@ def test_delete_planet(client, save_two_planets):
     assert response_body == {"details": "Planet #2 successfully deleted"}
 
 
-def test_update_planet(client, save_two_planets):
+def test_replace_planet(client, save_two_planets):
     response = client.put("/planets/1", json={
-        "name": "Updated Planet",
+        "name": "Replacing Planet",
         "description": "terrestrial",
         "has_moon": False
     })
@@ -84,6 +97,7 @@ def test_update_planet(client, save_two_planets):
 
     assert response.status_code == 200
     assert response_body == {"details": "Planet #1 successfully updated"}
+
 
 def test_invalid_key_for_creating_planet(client):
     response = client.post("/planets", json={
@@ -97,9 +111,10 @@ def test_invalid_key_for_creating_planet(client):
     assert response.status_code == 400
     assert response_body == {'details': "Missing key: 'name'"}
 
-def test_invalid_key_for_updating_planet(client, save_two_planets):
+
+def test_invalid_key_for_replacing_planet(client, save_two_planets):
     response = client.put("/planets/1", json={
-        "nme": "Updated Planet",
+        "nme": "Replacing Planet",
         "description": "terrestrial",
         "has_moon": False
     })
@@ -108,6 +123,7 @@ def test_invalid_key_for_updating_planet(client, save_two_planets):
 
     assert response.status_code == 400
     assert response_body == {'details': "Missing key: 'name'"}
+
 
 def test_invalid_id(client, save_two_planets):
     response = client.get("/planets/foo")
