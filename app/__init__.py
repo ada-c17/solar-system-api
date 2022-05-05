@@ -16,7 +16,7 @@ def create_app(test_config=None):
     migrate.init_app(app, db) # saying to migrate that this is what I want to work with/the way to get to the database.
     from app.models.planet import Planet
 
-    from .routes import planets_bp
+    from app.routes.planet_routes import planets_bp
     app.register_blueprint(planets_bp)
     # from .route import hello_world_bp
     # app.register_blueprint(hello_world_bp)

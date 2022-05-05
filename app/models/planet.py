@@ -14,3 +14,16 @@ class Planet(db.Model):
             "description": self.description,
             "length_of_day": self.length_of_day
         }
+    @classmethod
+    def create(cls, req_body):
+        new_planet = cls(
+            name = req_body["name"],
+            description = req_body["description"],
+            length_of_day = req_body["length_of_day"]
+        )
+        return new_planet
+
+    def update(self, req_body):
+        self.name = req_body["name"]
+        self.description = req_body["description"]
+        self.length_of_day = req_body["length_of_day"]
