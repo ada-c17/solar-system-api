@@ -3,13 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 import os
-<<<<<<< HEAD
-=======
+
 
 db = SQLAlchemy()
 migrate = Migrate()
 load_dotenv()
->>>>>>> 5952d2681d2751f9f45eb2cf8657682d11f7f463
 
 db = SQLAlchemy()
 migrate = Migrate()

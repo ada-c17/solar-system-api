@@ -9,54 +9,6 @@ from .models.planet import Planet
 #instantiate blueprint object
 bp = Blueprint("planets_bp",__name__, url_prefix="/planets")
 
-#design endpoint with blueprint tag
-
-@bp.route("", methods=["GET"])
-def read_all_planets():
-    # if request.method == "GET":
-    #     planets = Planet.query.all()
-        planets_response = []
-        name_query = request.args.get("name")
-
-        if name_query is not None:
-            planets = Planet.query.filter_by
-            name = name_query
-        else:
-            planets = Planet.query.all()
-
-        for planet in planets:
-            planets_response.append({
-                "id": planet.id,
-                "name": planet.name,
-                "description": planet.description,
-                "has_moon": planet.has_moon
-            })
-        return jsonify(planets_response)
-
-
-@bp.route("", methods=["POST"])
-def create_planet():
-    request_body = request.get_json()
-    new_planet = Planet(name=request_body["name"],
-                    description=request_body["description"],
-                    has_moon=request_body["has_moon"])
-
-    db.session.add(new_planet)
-    db.session.commit()
-
-    return make_response(f"Planet {new_planet.name} successfully created", 201)
-
-def get_planet_by_id(id):
-    try:
-        id = int(id)
-    except ValueError: 
-=======
-from app import db
-from .models.planet import Planet
-from flask import Blueprint, jsonify, abort, make_response, request
-
-bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
-
 #helper function to get one planet by id or return error message
 def get_planet_by_id(id):
     try:
@@ -71,8 +23,7 @@ def get_planet_by_id(id):
 
     else: 
         abort(make_response(jsonify(dict(details=f"Invalid id {id}")), 404))
-
-    
+   
 #create a planet
 @bp.route("", methods=["POST"])
 def create_planet():
@@ -85,7 +36,7 @@ def create_planet():
     db.session.add(new_planet)
     db.session.commit()
 
-    return make_response(f"Planet {new_planet.name} has been created"), 201
+    return make_response(f"Planet {new_planet.name} successfully created"), 201
 
 #read all planets
 @bp.route("", methods=["GET"])

@@ -32,7 +32,7 @@ def test_no_data_in_test_db_returns_404(client, two_saved_planets):
     # Assert
     assert response.status_code == 404
     assert response_body == {
-       "details" : 'Invalid planet 3'
+       "details" : 'Invalid id 3'
     }
     
 #create planet by id with JSON request body returns a 201
@@ -47,7 +47,7 @@ def test_create_one_planet(client):
 
     # Assert
     assert response.status_code == 201
-    assert response_body == "Planet Neptune has been created"
+    assert response_body == "Planet Neptune successfully created"
 
 
 
