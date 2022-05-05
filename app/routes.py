@@ -21,9 +21,10 @@ def validate_planet(planet_id):
 #GET all planets or GET by NAME query
 @planet_bp.route("", methods=["GET"])
 def get_all_planets():
-    name_query = request.args.get("name").title()
+
+    name_query = request.args.get("name")
     if name_query:
-        planets = Planet.query.filter_by(name=name_query)
+        planets = Planet.query.filter_by(name=name_query.title())
     else:
         planets = Planet.query.all()
 
@@ -35,9 +36,7 @@ def get_all_planets():
             "description" : planet.description,
             "color" : planet.color
         })
-    if not planet_response:
-        return abort(make_response({"message": f"Planet {name_query} is not found"}, 404))
-    
+            
     return jsonify(planet_response)
 
 #POST new planet
@@ -52,7 +51,7 @@ def add_new_planet():
     db.session.add(new_planet)
     db.session.commit()
 
-    return make_response(f"Planet {new_planet.name} was successfully created", 201)
+    return make_response(jsonify(f"Planet {new_planet.name} was successfully created"), 201)
 
 
 #GET one planet by id
@@ -79,7 +78,7 @@ def update_one_planet(planet_id):
 
     db.session.commit()
 
-    return make_response(f"Planet #{planet.planet_id}, '{planet.name}', successfully updated.")
+    return make_response(jsonify(f"Planet #{planet.planet_id}, '{planet.name}', successfully updated."), 200)
 
 
 #DELETE one planet by id
@@ -90,4 +89,4 @@ def delete_one_planet(planet_id):
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response(f"Planet #{planet.planet_id}, '{planet.name}', successfully deleted.")
+    return make_response(jsonify(f"Planet #{planet.planet_id}, '{planet.name}', successfully deleted."), 200)
