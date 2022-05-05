@@ -2,6 +2,7 @@ import pytest
 from app import create_app
 from app import db
 from flask.signals import request_finished
+from app.models.planet import Planet
 
 
 @pytest.fixture
@@ -23,3 +24,18 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+@pytest.fixture
+def create_two_planets(app):
+    planet_one = Planet(
+        name="Mercury",
+        description="smallest planet",
+        color="magenta"
+    )
+    planet_two = Planet(
+        name="Mars",
+        description="maybe we will live here?",
+        color="reddish brown"
+    )
+    db.session.add_all([planet_one, planet_two])
+    db.session.commit()
