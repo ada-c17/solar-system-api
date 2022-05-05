@@ -90,4 +90,4 @@ def update_planet(planet_id):
 
     db.session.commit()
 
-    return make_response(f"Planet {planet_id} was successfully updated.")
+    return make_response(jsonify(f"Planet {planet_id} was successfully replaced."))

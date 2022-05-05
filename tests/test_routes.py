@@ -45,3 +45,25 @@ def test_create_one_planet(client):
     #assert
     assert response.status_code == 201
     assert response_body == "Planet Venus successfully created"
+
+def test_replace_one_planet(client, create_two_planets):
+    # Act
+    response = client.put('/planets/1', json={
+        "name": "Earth",
+        "description": "Home for humans",
+        "color": "blueish green"
+    })
+    response_body = response.get_json()
+
+    #assert
+    assert response.status_code == 200
+    assert response_body == "Planet 1 was successfully replaced."
+
+def test_delete_one_planet(client, create_two_planets):
+    # Act
+    response = client.delete('/planets/1')
+    response_body = response.get_json()
+
+    #assert
+    assert response.status_code == 200
+    assert response_body == 'Planet 1 successfully deleted'
