@@ -33,15 +33,15 @@ def test_get_one_planet_with_no_records(client):
     assert response.status_code == 404
     assert response_body == None
 
-# def test_create_one_planet(client):
-#     # Act
-#     response = client.post('/planets', json={
-#         "name": "Venus",
-#         "description": "Planet of love",
-#         "color": "hot pink"
-#     })
-#     response_body = response.get_json()
+def test_create_one_planet(client):
+    # Act
+    response = client.post('/planets', json={
+        "name": "Venus",
+        "description": "Planet of love",
+        "color": "hot pink"
+    })
+    response_body = response.get_json()
 
-#     #assert
-#     assert response.status_code == 201
-#     assert response_body == "Planet Venus successfully created"
+    #assert
+    assert response.status_code == 201
+    assert response_body == "Planet Venus successfully created"
