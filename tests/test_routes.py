@@ -3,6 +3,7 @@ def test_get_all_planets_with_no_records(client):
     response_body = response.get_json()
 
     assert response.status_code == 200
+    assert len(response_body) == 0
     assert response_body == []
 
 
@@ -31,16 +32,18 @@ def test_get_all_planets(client, save_two_planets):
     response_body = response.get_json()
 
     assert response.status_code == 200
+    assert len(response_body) == 2
     assert response_body == [
         {"id": 1,
          "name": "Planet One",
          "description": "gaseous",
          "has_moon": True},
-         {"id": 2,
+        {"id": 2,
          "name": "Planet Two",
          "description": "terrestrial",
          "has_moon": False}
     ]
+
 
 def test_create_planet(client):
     response = client.post("/planets", json={
@@ -52,4 +55,9 @@ def test_create_planet(client):
     response_body = response.get_json()
 
     assert response.status_code == 201
-    assert response_body == "Planet New Planet successfully created"
+    assert response_body == {
+        "id": 1,
+        "name": "New Planet",
+        "description": "gaseous",
+        "has_moon": False
+    }
