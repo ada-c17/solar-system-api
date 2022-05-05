@@ -4,10 +4,10 @@ from app.models.planet import Planet
 from .helper import validate_planet
 solar_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-# GET ALL and POST planet
+# GET and POST planets
 @solar_bp.route("", methods=["POST", "GET"])
 def handle_planets():
-    #create a planet
+    # Create a planet
     if request.method== "POST":
         request_body=request.get_json()
         new_planet=Planet.create(request_body)
@@ -17,6 +17,7 @@ def handle_planets():
 
         return make_response(f"Planet {new_planet.name} successfully created", 201)
 
+    # Get all planets, or filter by planet name
     elif request.method== "GET":
         name_query=request.args.get('name')
         if name_query:
@@ -25,26 +26,16 @@ def handle_planets():
             planets=Planet.query.all()
         planets_response=[]
         for planet in planets:
-            planets_response.append(
-                    {"id": planet.id,
-                    "name": planet.name,
-                    "description": planet.description,
-                    "color": planet.color})
+            planets_response.append(planet.to_json())
+
         return jsonify(planets_response), 200
-
-
 
 
 # GET ONE Planet
 @solar_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
     planet = validate_planet(planet_id)
-    return {
-        "id": planet.id,
-        "name": planet.name,
-        "description": planet.description,
-        "color": planet.color
-    }
+    return jsonify(planet.to_json()), 200
 
 # UPDATE Planet
 @solar_bp.route("/<planet_id>", methods=["PUT"])
