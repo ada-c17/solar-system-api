@@ -1,11 +1,9 @@
-from os import abort
 from app import db
 from app.models.planet import Planet
 from flask import Blueprint, jsonify, abort, make_response, request
-
+# from .helper import validate_planet
 
 planet_bp = Blueprint("planet_bp", __name__, url_prefix="/planets")
-# Helper function:
 
 def validate_planet(planet_id):
     try:
@@ -17,7 +15,6 @@ def validate_planet(planet_id):
     if not planet:
         abort(make_response({"message":f"planet {planet_id} not found"}, 404))
     return planet
-
 
 @planet_bp.route("", methods=["POST"])
 def create_planets():
@@ -34,28 +31,24 @@ def create_planets():
 
 @planet_bp.route("", methods=["GET"])
 def read_all_planets():
-    planets_response = []
+    
 
     name_query = request.args.get("name")
-    
+    moons_query = request.args.get("moons")
     if name_query:
         planets = Planet.query.filter_by(name = name_query)
+    elif moons_query:
+        planets = Planet.query.filter_by(moons = moons_query)
     else:
         planets = Planet.query.all()
-        
+    planets_response = []    
     try:
         for planet in planets:
-            planets_response.append(
-                {
-                    "id": planet.id,
-                    "name": planet.name,
-                    "description": planet.description,
-                    "moons": planet.moons
-                }
-            )
+            planets_response.append(planet.to_json())
+            
     except:
-        abort(make_response({"message":f"planet not found"}, 404))
-    return jsonify(planets_response)
+        abort(make_response(jsonify(f"planet not found"), 404))
+    return make_response(jsonify(planets_response),200)
 
 
 
@@ -63,12 +56,8 @@ def read_all_planets():
 @planet_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
     planet = validate_planet(planet_id)
-    return make_response(planet.to_json(), 200)
+    return make_response(jsonify(planet.to_json()), 200)
 
-    # planets_response = []
-    # for planet in planets:
-    #     planets_response.append(planet.to_json())
-    # return jsonify(planets_response), 200
 
 @planet_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
@@ -80,7 +69,7 @@ def update_planet(planet_id):
         planet.description = request_body["description"]
         planet.moons = request_body["moons"]
     except:
-        abort(make_response({"message":f"invalid data"}, 400))
+        abort(make_response(jsonify(f"invalid data"), 400))
     
     db.session.commit()
 
