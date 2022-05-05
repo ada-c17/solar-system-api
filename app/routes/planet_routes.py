@@ -16,7 +16,7 @@ def get_all_planets():
         planets = Planet.query.filter_by(id = id_query)
     else:
         planets = Planet.query.all() 
-    # ????????? why do we need else if we can still use line 18 ?????????
+
     planets_response = []
     # planets = Planet.query.all()
     for planet in planets:
