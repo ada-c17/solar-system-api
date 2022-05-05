@@ -38,8 +38,8 @@ def create_planets():
     new_planet = Planet.create(request_body)
     db.session.add(new_planet)
     db.session.commit()
-    return make_response(f"Planet {new_planet.name} successfully created", 201)
-
+    return make_response(jsonify(f"Planet {new_planet.name} successfully created"), 201)
+    # return make_response(f"Planet {new_planet.name} successfully created", 201)
 # Update one planet
 @planets_bp.route("/<id>", methods=["PUT"])
 def update_one_planet(id):
