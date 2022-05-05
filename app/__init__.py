@@ -3,6 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 import os
+<<<<<<< HEAD
+=======
+
+db = SQLAlchemy()
+migrate = Migrate()
+load_dotenv()
+>>>>>>> 5952d2681d2751f9f45eb2cf8657682d11f7f463
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -26,6 +33,19 @@ def create_app(test_config=None):
     migrate.init_app(app, db)
 
     from app.models.planet import Planet
+
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    if not test_config:
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+    else:
+        app.config["TESTING"] = True
+        app.config['SQLALCHEMY_TEST_DATABASE_URI'] = os.environ.get('SQLALCHEMY_TEST_DATABASE_URI')
+
+
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    from .models.planet import Planet
 
     from .routes import bp
     app.register_blueprint(bp)
