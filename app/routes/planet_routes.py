@@ -5,7 +5,6 @@ from .helpers import validate_planet
 
 planet_bp = Blueprint("planet", __name__, url_prefix="/planets")
 
-
 @planet_bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
@@ -15,8 +14,7 @@ def create_planet():
     db.session.add(new_planet)
     db.session.commit()
 
-    return make_response(f"Planet {new_planet.name} has been created", 201)
-
+    return make_response(jsonify(f"Planet {new_planet.name} has been created"), 201)
 
 @ planet_bp.route("", methods=["GET"])
 def get_planets():
@@ -31,14 +29,12 @@ def get_planets():
 
     planets_response = [planet.to_json() for planet in planets]
 
-    return jsonify(planets_response, 200)
-
+    return make_response(jsonify(planets_response), 200)
 
 @ planet_bp.route("/<planet_id>", methods=["GET"])
 def get_one_planet(planet_id):
     planet = validate_planet(planet_id)
-    return jsonify(planet.to_json(), 200)
-
+    return make_response(jsonify(planet.to_json()), 200)
 
 @ planet_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
@@ -49,10 +45,9 @@ def update_planet(planet_id):
         Planet.update(request_body)
         db.session.commit()
     except KeyError:
-        return abort(make_response({"message": "Missing information"}, 400))
+        return abort(make_response(jsonify("Missing information")), 400)
 
-    return make_response(f"Planet #{planet.id} successfully updated")
-
+    return make_response(jsonify(f"Planet #{planet.id} successfully updated"), 200)
 
 @ planet_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_one_planet(planet_id):
@@ -61,4 +56,4 @@ def delete_one_planet(planet_id):
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response(f"Planet {planet.id} has been deleted", 200)
+    return make_response(jsonify(f"Planet {planet.id} has been deleted"), 200)
