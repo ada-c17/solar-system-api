@@ -1,0 +1,12 @@
+
+ - postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_api
+ - set the models folder + add init
+ - import db to models
+ - in init import models
+ - flask db init
+ - flask db migrate
+ - flask db upgrade
+ - confirm migration in postgres
+ - create endpoints for post
+ - import request
+ 

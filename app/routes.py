@@ -37,7 +37,7 @@ def create_one_planet():
     db.session.add(new_planet)
     db.session.commit()
 
-    return make_response(f"Planet {new_planet.id} created")
+    return make_response(f"Planet {new_planet.name} successfully created!", 201)
 
 
 @planet_bp.route("/<id>", methods=["GET"])
