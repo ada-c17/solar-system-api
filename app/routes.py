@@ -1,6 +1,7 @@
 from app import db
 from app.models.planet import Planet
-from .routes_helper import success_msg, make_planet_safely, replace_planet_safely, get_planet_record_by_id
+from .routes_helper import success_msg
+from .planet_routes_helper import make_planet_safely, replace_planet_safely, get_planet_record_by_id
 from flask import Blueprint, jsonify, make_response, abort, request
 
 

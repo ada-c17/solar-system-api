@@ -63,6 +63,7 @@ def test_create_planet(client):
         "has_moon": False
     }
 
+# There are additional tests I wrote to increase the code coverage as extra practice. It is not part of the project requirements.
 
 def test_delete_planet(client, save_two_planets):
     response = client.delete("/planets/2")
@@ -83,3 +84,34 @@ def test_update_planet(client, save_two_planets):
 
     assert response.status_code == 200
     assert response_body == {"details": "Planet #1 successfully updated"}
+
+def test_invalid_key_for_creating_planet(client):
+    response = client.post("/planets", json={
+        "nme": "New Planet",
+        "description": "gaseous",
+        "has_moon": False
+    })
+
+    response_body = response.get_json()
+
+    assert response.status_code == 400
+    assert response_body == {'details': "Missing key: 'name'"}
+
+def test_invalid_key_for_updating_planet(client, save_two_planets):
+    response = client.put("/planets/1", json={
+        "nme": "Updated Planet",
+        "description": "terrestrial",
+        "has_moon": False
+    })
+
+    response_body = response.get_json()
+
+    assert response.status_code == 400
+    assert response_body == {'details': "Missing key: 'name'"}
+
+def test_invalid_id(client, save_two_planets):
+    response = client.get("/planets/foo")
+    response_body = response.get_json()
+
+    assert response.status_code == 400
+    assert response_body == {'details': "Invalid id: foo"}
