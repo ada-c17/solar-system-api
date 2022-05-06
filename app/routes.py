@@ -15,7 +15,7 @@ def handle_planets():
         db.session.add(new_planet)
         db.session.commit()
 
-        return make_response(f"Planet {new_planet.name} successfully created", 201)
+        return make_response(jsonify(f"Planet {new_planet.name} successfully created"), 201)
 
     # Get all planets, or filter by planet name
     elif request.method== "GET":

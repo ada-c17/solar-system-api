@@ -52,3 +52,17 @@ def test_get_one_planet_with_no_records(client):
     # Assert
     assert response.status_code == 404
     assert response_body == {"message": "planet 1 not found"}
+
+
+def test_create_one_planet(client):
+    # Act
+    response = client.post("/planets", json={
+        "name": "Mars",
+        "description": "Is Bruno Mars counted as Mars?",
+        "color": "orange"
+    })
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 201
+    assert response_body == "Book New Book successfully created"
