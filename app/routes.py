@@ -1,40 +1,32 @@
 from flask import Blueprint, jsonify, abort, make_response, request
 from app import db
 from app.models.planet import Planet
-# class Planet:
-#     def __init__(self, id, name, moons, description):
-#         self.id = id
-#         self.name = name
-#         self.moons = moons
-#         self.description = description 
-
-
-# planets = [
-#     Planet(1, "Mercury", 0, "The first planet."),
-#     Planet(2, "Venus", 0, "The second planet."),
-#     Planet(3, "Earth", 1, "The third planet.")
-
-# ]
 
 planets_bp = Blueprint("planets", __name__, url_prefix = "/planets")
+
+def error_message(message, status_code):
+    abort(make_response(jsonify(dict(details=message)), status_code))
 
 @planets_bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
-    new_planet = Planet(
-        # id=request_body["id"],
-        name=request_body["name"],
-        moons=request_body["moons"],
-        description=request_body["description"])
+
+    try:
+        planet = Planet.from_dict(request_body)
     
-    db.session.add(new_planet)
+    except KeyError as err:
+        abort(make_response(jsonify(details=f"Missing key: {err} invalid"), 400))
+
+    db.session.add(planet)
     db.session.commit()
 
-    return make_response(jsonify(f"Planet {new_planet.name} successfully created"), 201)
+    # return make_response(jsonify(f"Planet {planet.name} successfully created"), 201)
+    return jsonify(planet.to_dict()), 201
 
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
     name_query = request.args.get("name")
+
     if name_query:
         planets = Planet.query.filter_by(name=name_query)
     else:
@@ -96,6 +88,3 @@ def validate_planet(planet_id):
         abort(make_response({"message": f"planet {planet_id} not found"}, 404))
     
     return planet
-    
-
-    
