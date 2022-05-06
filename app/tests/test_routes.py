@@ -65,4 +65,4 @@ def test_create_one_planet(client):
 
     # Assert
     assert response.status_code == 201
-    assert response_body == "Book New Book successfully created"
+    assert response_body == "Planet Mars successfully created"
