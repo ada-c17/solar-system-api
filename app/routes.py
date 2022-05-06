@@ -34,7 +34,7 @@ def get_planets():
 def read_one_planet(planet_id):
     planet = validate_planet(planet_id)
 
-    return jsonify(planet.to_json())
+    return jsonify(planet.to_json()), 200
 
 @planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
@@ -46,7 +46,7 @@ def update_planet(planet_id):
 
     db.session.commit()
 
-    return make_response(f"Planet #{planet.id} successfully updated")
+    return make_response(f"Planet #{planet.id} successfully updated", 200)
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_planet(planet_id):
@@ -55,4 +55,4 @@ def delete_planet(planet_id):
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response(f"Planet #{planet.id} successfully deleted")
+    return make_response(f"Planet #{planet.id} successfully deleted", 200)
