@@ -1,5 +1,5 @@
 from app import db
-from flask import abort, make_response
+from flask import abort, make_response, jsonify
 
 class Planet(db.Model):
     
@@ -21,9 +21,9 @@ class Planet(db.Model):
         try:
             planet_id = int(planet_id)
         except:
-            abort(make_response({"message": f"{planet_id} is not a valid planet id."},400))
+            abort(make_response(jsonify(f"{planet_id} is not a valid planet id."),400))
         planet = cls.query.get(planet_id)  
         if planet:
             return planet
-        abort(make_response({"message": f"Planet with id of {planet_id} was not found"},404))
+        abort(make_response(jsonify(f"Planet with id of {planet_id} was not found"),404))
 
