@@ -1,20 +1,20 @@
 from app import db
 from app.models.planet import Planet
 from flask import Blueprint, jsonify, abort, make_response, request
-# from .helper import validate_planet
+from .helper import validate_planet
 
 planet_bp = Blueprint("planet_bp", __name__, url_prefix="/planets")
 
-def validate_planet(planet_id):
-    try:
-        planet_id = int(planet_id)
-    except:
-        abort(make_response(jsonify(f"planet {planet_id} invalid"), 400))
+# def validate_planet(planet_id):
+#     try:
+#         planet_id = int(planet_id)
+#     except:
+#         abort(make_response(jsonify(f"planet {planet_id} invalid"), 400))
 
-    planet = Planet.query.get(planet_id)
-    if not planet:
-        abort(make_response(jsonify(f"planet {planet_id} not found"), 404))
-    return planet
+#     planet = Planet.query.get(planet_id)
+#     if not planet:
+#         abort(make_response(jsonify(f"planet {planet_id} not found"), 404))
+#     return planet
 
 @planet_bp.route("", methods=["POST"])
 def create_planets():
