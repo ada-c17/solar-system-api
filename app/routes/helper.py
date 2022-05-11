@@ -1,6 +1,6 @@
 # Helper function:
 from flask import abort, make_response, jsonify
-from models.planet import Planet
+from app.models.planet import Planet
 
 def validate_planet(planet_id):
     try:
