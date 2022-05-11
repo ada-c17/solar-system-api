@@ -8,13 +8,7 @@
 #     description = db.Column(db.String)
 #     has_life = db.Column(db.Boolean)
     
-#     def to_json(self):
-#         return {
-#             "name": self.name,
-#             "id": self.id,
-#             "description": self.description,
-#             "has_life": self.has_life
-#         }
+
     
 #     @classmethod
 #     def validate_id(cls, planet_id):
@@ -36,3 +30,11 @@ class Moon(db.Model):
     had_life = db.Column(db.Boolean)
     planet_id = db.Column(db.Integer, db.ForeignKey('planet.id'))
     planet = db.relationship('Planet', back_populates='moons')
+
+    def to_json(self):
+        return {
+            "size": self.size,
+            "id": self.id,
+            "description": self.description,
+            "had_life": self.had_life
+        }
