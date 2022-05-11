@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, make_response, abort
 from app import db
 from app.models.planet import Planet
 from .helper import validate_planet
+
 solar_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 # GET and POST planets
