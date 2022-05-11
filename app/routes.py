@@ -68,12 +68,12 @@ def add_moons(planet_id):
     new_moon = Moon(
         size = moon_data['size'], 
         description = moon_data['description'],
-        had_life = moon_data['had_life']
+        had_life = moon_data['had_life'] == 'True'
         )
     planet.moons.append(new_moon)
     db.session.commit()
 
-    return jsonify({"New moon successfully added."}), 201
+    return jsonify({"message": "New moon successfully added."}), 201
 
 @planet_bp.route("/<planet_id>/moons", methods=['GET'])
 def get_moons(planet_id):
