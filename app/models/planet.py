@@ -7,6 +7,7 @@ class Planet(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     description = db.Column(db.String)
     has_life = db.Column(db.Boolean)
+    moons = db.relationship('Moon', back_populates='planet')
     
     def to_json(self):
         return {
