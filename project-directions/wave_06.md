@@ -30,7 +30,8 @@ Create test fixtures and unit tests for the following test cases:
 
 ## Code Coverage
 
-Check your code coverage using `pytest-cov`. Review the [code coverage exercise](https://github.com/adaGold/code-coverage-exercise) on how to use `pytest-cov` to generate a code coverage report. We will need to change the directory where the application code is located from `student` to `app`.
+Check your code coverage using `pytest-cov`. Review the [code coverage exercise](pip install -r requirements.txt
+) on how to use `pytest-cov` to generate a code coverage report. We will need to change the directory where the application code is located from `student` to `app`.
 
 `pytest --cov=app --cov-report html --cov-report term`
 
