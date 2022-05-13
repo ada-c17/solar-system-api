@@ -2,23 +2,23 @@ from flask import Blueprint, jsonify, abort, make_response, request
 from .models.planet import Planet
 from app import db
 
-# def validate_planet(planet_id):
-#     try:
-#         planet_id = int(planet_id)
-#     except:
-#         abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+def validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
 
-#     for planet in planets:
-#         if planet.id == planet_id:
-#             return planet
+    planet = Planet.query.get(planet_id)
 
-#     abort(make_response({"message":f"planet {planet_id} not found"}, 404))
+    if not planet:
+        abort(make_response({"message":f"planet {planet_id} not found"}, 404))
 
+    return planet
 
 bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 @bp.route("", methods=("POST",))
-def post_planets():
+def post_planet():
     request_body = request.get_json()
 
     new_planet = Planet(name=request_body["name"],
@@ -38,13 +38,31 @@ def get_planets():
 
     return jsonify(result_list), 200
 
-# @bp.route("/<planet_id>", methods=("GET",))
-# def get_individual_planet(planet_id):
-#     planet = validate_planet(planet_id)
+@bp.route("/<planet_id>", methods=("GET",))
+def get_individual_planet(planet_id):
+    planet = validate_planet(planet_id)
 
-#     return {
-#         "id": planet.id,
-#         "name": planet.name,
-#         "description": planet.description,
-#         "has_moon": planet.has_moon
-#             }, 200
+    return jsonify(planet.to_dict()), 200
+
+@bp.route("/<planet_id>", methods=("PUT",))
+def put_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    request_body = request.get_json()
+
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+    planet.has_moon = request_body["has_moon"]
+
+    db.session.commit()
+
+    return make_response(f"Planet #{planet.id} successfully updated"), 200
+
+@bp.route("/<planet_id>", methods=("DELETE",))
+def delete_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    db.session.delete(planet)
+    db.session.commit()
+
+    return make_response(f"Planet #{planet.id} successfully deleted"), 200
