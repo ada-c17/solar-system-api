@@ -33,17 +33,6 @@ def replace_planet_safely(planet, data_dict):
 
 bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-@bp.route("", methods=("POST",))
-def post_planet():
-    request_body = request.get_json()
-
-    new_planet = create_planet_safely(request_body)
-
-    db.session.add(new_planet)
-    db.session.commit()
-
-    return make_response(f"Planet {new_planet.name} successfully created", 201)
-
 @bp.route("", methods=("GET",))
 def get_planets():
     description_query = request.args.get("description")
@@ -59,6 +48,17 @@ def get_planets():
     result_list = [planet.to_dict() for planet in planets]
 
     return jsonify(result_list), 200
+
+@bp.route("", methods=("POST",))
+def post_one_planet():
+    request_body = request.get_json()
+
+    new_planet = create_planet_safely(request_body)
+
+    db.session.add(new_planet)
+    db.session.commit()
+
+    return make_response(jsonify(f"Planet {new_planet.name} successfully created")), 201
 
 @bp.route("/<planet_id>", methods=("GET",))
 def get_individual_planet(planet_id):
@@ -76,7 +76,7 @@ def put_planet(planet_id):
 
     db.session.commit()
 
-    return make_response(f"Planet #{planet.id} successfully updated"), 200
+    return make_response(jsonify(f"Planet #{planet.id} successfully updated")), 200
 
 @bp.route("/<planet_id>", methods=("DELETE",))
 def delete_planet(planet_id):
@@ -85,4 +85,4 @@ def delete_planet(planet_id):
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response(f"Planet #{planet.id} successfully deleted"), 200
+    return make_response(jsonify(f"Planet {planet.id} successfully deleted")), 200
