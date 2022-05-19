@@ -31,9 +31,9 @@ def replace_planet_safely(planet, data_dict):
         error_message(f"Missing key: {err}", 400)
 
 
-bp = Blueprint("planets", __name__, url_prefix="/planets")
+planet_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-@bp.route("", methods=("GET",))
+@planet_bp.route("", methods=("GET",))
 def get_planets():
     description_query = request.args.get("description")
     has_moon_query = request.args.get("has_moon")
@@ -49,7 +49,7 @@ def get_planets():
 
     return jsonify(result_list), 200
 
-@bp.route("", methods=("POST",))
+@planet_bp.route("", methods=("POST",))
 def post_one_planet():
     request_body = request.get_json()
 
@@ -60,13 +60,13 @@ def post_one_planet():
 
     return make_response(jsonify(f"Planet {new_planet.name} successfully created")), 201
 
-@bp.route("/<planet_id>", methods=("GET",))
+@planet_bp.route("/<planet_id>", methods=("GET",))
 def get_individual_planet(planet_id):
     planet = validate_planet(planet_id)
 
     return jsonify(planet.to_dict()), 200
 
-@bp.route("/<planet_id>", methods=("PUT",))
+@planet_bp.route("/<planet_id>", methods=("PUT",))
 def put_planet(planet_id):
     planet = validate_planet(planet_id)
 
@@ -78,7 +78,7 @@ def put_planet(planet_id):
 
     return make_response(jsonify(f"Planet #{planet.id} successfully updated")), 200
 
-@bp.route("/<planet_id>", methods=("DELETE",))
+@planet_bp.route("/<planet_id>", methods=("DELETE",))
 def delete_planet(planet_id):
     planet = validate_planet(planet_id)
 
@@ -86,3 +86,5 @@ def delete_planet(planet_id):
     db.session.commit()
 
     return make_response(jsonify(f"Planet {planet.id} successfully deleted")), 200
+
+moon_bp = Blueprint("moons", __name__, url_prefix="/moons")
