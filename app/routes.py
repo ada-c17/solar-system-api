@@ -86,5 +86,3 @@ def delete_planet(planet_id):
     db.session.commit()
 
     return make_response(jsonify(f"Planet {planet.id} successfully deleted")), 200
-
-moon_bp = Blueprint("moons", __name__, url_prefix="/moons")
